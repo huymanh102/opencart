@@ -1,0 +1,25 @@
+2018-10-20 23:18:05 - Exception:  Error: EHLO not accepted from server! in /var/www/html/vncrafts.com/system/library/mail/smtp.php on line 121
+2018-10-20 23:18:31 - Exception:  Error: Password not accepted from server! in /var/www/html/vncrafts.com/system/library/mail/smtp.php on line 241
+2018-10-20 23:23:53 - Exception:  Error: Password not accepted from server! in /var/www/html/vncrafts.com/system/library/mail/smtp.php on line 241
+2018-10-20 23:25:07 - PHP Warning:  fsockopen(): SSL operation failed with code 1. OpenSSL Error messages:
+error:1408F10B:SSL routines:ssl3_get_record:wrong version number in /var/www/html/vncrafts.com/system/library/mail/smtp.php on line 88
+2018-10-20 23:25:07 - PHP Warning:  fsockopen(): Failed to enable crypto in /var/www/html/vncrafts.com/system/library/mail/smtp.php on line 88
+2018-10-20 23:25:07 - PHP Warning:  fsockopen(): unable to connect to ssl://smtp.gmail.com:25 (Unknown error) in /var/www/html/vncrafts.com/system/library/mail/smtp.php on line 88
+2018-10-20 23:25:07 - Exception:  Error:  (0) in /var/www/html/vncrafts.com/system/library/mail/smtp.php on line 91
+2018-10-20 23:29:16 - Exception:  Error: Password not accepted from server! in /var/www/html/vncrafts.com/system/library/mail/smtp.php on line 241
+2018-10-20 23:50:07 - Exception:  Error: Password not accepted from server! in /var/www/html/vncrafts.com/system/library/mail/smtp.php on line 241
+2018-10-20 23:50:14 - Exception:  Error: Password not accepted from server! in /var/www/html/vncrafts.com/system/library/mail/smtp.php on line 241
+2018-10-20 23:50:28 - Exception:  Error: Password not accepted from server! in /var/www/html/vncrafts.com/system/library/mail/smtp.php on line 241
+2018-10-20 23:50:36 - Exception:  Error: Password not accepted from server! in /var/www/html/vncrafts.com/system/library/mail/smtp.php on line 241
+2018-10-20 23:51:59 - Exception:  Error: EHLO not accepted from server! in /var/www/html/vncrafts.com/system/library/mail/smtp.php on line 121
+2018-10-20 23:53:01 - Exception:  Error: Password not accepted from server! in /var/www/html/vncrafts.com/system/library/mail/smtp.php on line 241
+2018-10-20 23:56:26 - Exception:  Error: Password not accepted from server! in /var/www/html/vncrafts.com/system/library/mail/smtp.php on line 241
+2018-10-20 23:58:24 - Exception:  Error: Password not accepted from server! in /var/www/html/vncrafts.com/system/library/mail/smtp.php on line 241
+2018-10-21 0:17:17 - PHP Warning:  fsockopen(): SSL operation failed with code 1. OpenSSL Error messages:
+error:1408F10B:SSL routines:ssl3_get_record:wrong version number in /var/www/html/vncrafts.com/system/library/mail/smtp.php on line 88
+2018-10-21 0:17:17 - PHP Warning:  fsockopen(): Failed to enable crypto in /var/www/html/vncrafts.com/system/library/mail/smtp.php on line 88
+2018-10-21 0:17:17 - PHP Warning:  fsockopen(): unable to connect to ssl://smtp.gmail.com:25 (Unknown error) in /var/www/html/vncrafts.com/system/library/mail/smtp.php on line 88
+2018-10-21 0:17:17 - Exception:  Error:  (0) in /var/www/html/vncrafts.com/system/library/mail/smtp.php on line 91
+2018-10-22 11:59:55 - PHP Warning:  move_uploaded_file(/var/www/html/vncrafts.com/image/catalog/A1qZeB6+tsL._RI_SX300_.jpg): failed to open stream: Permission denied in /var/www/html/vncrafts.com/admin/controller/common/filemanager.php on line 292
+2018-10-22 11:59:55 - PHP Warning:  move_uploaded_file(): Unable to move '/tmp/phpkHbdvu' to '/var/www/html/vncrafts.com/image/catalog/A1qZeB6+tsL._RI_SX300_.jpg' in /var/www/html/vncrafts.com/admin/controller/common/filemanager.php on line 292
+2018-10-22 12:05:17 - Error:  Call to a member function getProduct() on null in /var/www/html/vncrafts.com/catalog/controller/product/product.php on line 634
