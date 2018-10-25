@@ -21,13 +21,13 @@ class ControllerExtensionModulePPButton extends Controller {
 
 				if ($this->config->get('payment_pp_express_test') == 1) {
 					$data['username'] = $this->config->get('payment_pp_express_sandbox_username');
-					$data['paypal_environment'] = 'sandbox';
+					$data['environment'] = 'sandbox';
 				} else {
 					$data['username'] = $this->config->get('payment_pp_express_username');
-					$data['paypal_environment'] = 'production';
+					$data['environment'] = 'live';
 				}
 
-				$data['payment_url'] = $this->url->link('extension/payment/pp_express/express');
+				$data['payment_url'] = $this->url->link('extension/payment/pp_express/express', '', true);
 
 				return $this->load->view('extension/module/pp_button', $data);
 			}

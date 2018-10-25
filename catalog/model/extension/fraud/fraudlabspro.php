@@ -6,6 +6,8 @@ class ModelExtensionFraudFraudLabsPro extends Model {
 			return;
 		}
 
+		$risk_score = 0;
+
 		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "fraudlabspro` WHERE order_id = '" . (int)$data['order_id'] . "'");
 
 		// Do not call FraudLabs Pro API if order is already screened.
@@ -21,12 +23,8 @@ class ModelExtensionFraudFraudLabsPro extends Model {
 		}
 
 		// Get real client IP is they are behind proxy server.
-		if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-			$xip = trim(current(explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])));
-			
-			if (filter_var($xip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
-				$ip = $xip;
-			}
+		if(isset($_SERVER['HTTP_X_FORWARDED_FOR']) && filter_var($_SERVER['HTTP_X_FORWARDED_FOR'], FILTER_VALIDATE_IP)){
+			$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
 		}
 
 		// Overwrite client IP if simulate IP is provided.
@@ -38,7 +36,6 @@ class ModelExtensionFraudFraudLabsPro extends Model {
 		$request['ip'] = $ip;
 		$request['first_name'] = $data['firstname'];
 		$request['last_name'] = $data['lastname'];
-		$request['bill_addr'] = $data['payment_address_1'];
 		$request['bill_city'] = $data['payment_city'];
 		$request['bill_state'] = $data['payment_zone'];
 		$request['bill_country'] = $data['payment_iso_code_2'];
@@ -47,8 +44,6 @@ class ModelExtensionFraudFraudLabsPro extends Model {
 		$request['user_phone'] = $data['telephone'];
 
 		if ($data['shipping_method']) {
-			$request['ship_first_name'] = $data['shipping_firstname'];
-			$request['ship_last_name'] = $data['shipping_lastname'];
 			$request['ship_addr'] = $data['shipping_address_1'];
 			$request['ship_city'] = $data['shipping_city'];
 			$request['ship_state'] = $data['shipping_zone'];
@@ -64,11 +59,9 @@ class ModelExtensionFraudFraudLabsPro extends Model {
 		$request['payment_mode'] = $data['payment_code'];
 		$request['user_order_id'] = $data['order_id'];
 		$request['flp_checksum'] = (isset($_COOKIE['flp_checksum'])) ? $_COOKIE['flp_checksum'] : '';
-		$request['bin_no'] = (isset($_SESSION['flp_cc_bin'])) ? $_SESSION['flp_cc_bin'] : '';
-		$request['card_hash'] = (isset($_SESSION['flp_cc_hash'])) ? $_SESSION['flp_cc_hash'] : '';
 		$request['format'] = 'json';
 		$request['source'] = 'opencart';
-		$request['source_version'] = '3.0.2.0';
+		$request['source_version'] = '2.1.0.2';
 
 		$curl = curl_init();
 		curl_setopt($curl, CURLOPT_URL, 'https://api.fraudlabspro.com/v1/order/screen?' . http_build_query($request));
@@ -81,6 +74,8 @@ class ModelExtensionFraudFraudLabsPro extends Model {
 		$response = curl_exec($curl);
 
 		curl_close($curl);
+
+		$risk_score = 0;
 
 		if (is_null($json = json_decode($response)) === FALSE) {
 			$this->db->query("REPLACE INTO `" . DB_PREFIX . "fraudlabspro` SET order_id = '" . (int)$data['order_id'] . "',
@@ -132,11 +127,16 @@ class ModelExtensionFraudFraudLabsPro extends Model {
 				ip_address = '" .  $ip . "'"
 			);
 
+			$risk_score = (int)$json->fraudlabspro_score;
 		}
 
 		// Do not perform any action if error found
 		if ($json->fraudlabspro_error_code) {
 			return;
+		}
+
+		if ($risk_score > $this->config->get('fraud_fraudlabspro_score')) {
+			return $this->config->get('fraud_fraudlabspro_order_status_id');
 		}
 
 		if ($json->fraudlabspro_status == 'REVIEW') {
@@ -150,9 +150,6 @@ class ModelExtensionFraudFraudLabsPro extends Model {
 		if ($json->fraudlabspro_status == 'REJECT') {
 			return $this->config->get('fraudlabspro_reject_status_id');
 		}
-
-		unset($_SESSION['flp_cc_bin']);
-		unset($_SESSION['flp_cc_hash']);
 	}
 
 	private function hashIt($s) {
