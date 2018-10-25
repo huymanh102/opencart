@@ -14,7 +14,7 @@ class ControllerExtensionModulePPLogin extends Controller {
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
-			$this->response->redirect($this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=module'));
+			$this->response->redirect($this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=module', true));
 		}
 
 		if (isset($this->error['warning'])) {
@@ -39,22 +39,22 @@ class ControllerExtensionModulePPLogin extends Controller {
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
-			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'])
+			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true)
 		);
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_extension'),
-			'href' => $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=module')
+			'href' => $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=module', true)
 		);
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('heading_title'),
-			'href' => $this->url->link('extension/module/pp_login', 'user_token=' . $this->session->data['user_token'])
+			'href' => $this->url->link('extension/module/pp_login', 'user_token=' . $this->session->data['user_token'], true)
 		);
 
-		$data['action'] = $this->url->link('extension/module/pp_login', 'user_token=' . $this->session->data['user_token']);
+		$data['action'] = $this->url->link('extension/module/pp_login', 'user_token=' . $this->session->data['user_token'], true);
 
-		$data['cancel'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=module');
+		$data['cancel'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=module', true);
 
 		if (isset($this->request->post['module_pp_login_client_id'])) {
 			$data['module_pp_login_client_id'] = $this->request->post['module_pp_login_client_id'];
@@ -250,7 +250,7 @@ class ControllerExtensionModulePPLogin extends Controller {
 			$data['module_pp_login_locale'] = $this->config->get('module_pp_login_locale');
 		}
 
-		$data['return_url'] = HTTP_CATALOG . 'index.php?route=extension/module/pp_login/login';
+		$data['return_url'] = HTTPS_CATALOG . 'index.php?route=extension/module/pp_login/login';
 
 		if (isset($this->request->post['module_pp_login_status'])) {
 			$data['module_pp_login_status'] = $this->request->post['module_pp_login_status'];
@@ -282,13 +282,13 @@ class ControllerExtensionModulePPLogin extends Controller {
 	}
 
 	public function install() {
-		$this->load->model('setting/event');
+		$this->load->model('marketplace/event');
 
 		$this->model_setting_event->addEvent('pp_login', 'catalog/controller/account/logout/after', 'extension/module/pp_login/logout');
 	}
 
 	public function uninstall() {
-		$this->load->model('setting/event');
+		$this->load->model('marketplace/event');
 
 		$this->model_setting_event->deleteEventByCode('pp_login');
 	}

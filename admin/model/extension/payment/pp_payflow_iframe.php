@@ -1,5 +1,5 @@
 <?php
-class ModelExtensionPaymentPPPayflowIframe extends Model {
+class ModelExtensionPaymentPPPayflowIFrame extends Model {
 	public function install() {
 		$this->db->query("
 			CREATE TABLE `" . DB_PREFIX . "paypal_payflow_iframe_order` (
@@ -60,10 +60,10 @@ class ModelExtensionPaymentPPPayflowIframe extends Model {
 		$this->db->query("
 			INSERT INTO " . DB_PREFIX . "paypal_payflow_iframe_order_transaction
 			SET order_id = " . (int)$data['order_id'] . ",
-				transaction_reference = '" . $this->db->escape((string)$data['transaction_reference']) . "',
-				transaction_type = '" . $this->db->escape((string)$data['type']) . "',
+				transaction_reference = '" . $this->db->escape($data['transaction_reference']) . "',
+				transaction_type = '" . $this->db->escape($data['type']) . "',
 				`time` = NOW(),
-				`amount` = '" . $this->db->escape((string)$data['amount']) .  "'
+				`amount` = '" . $this->db->escape($data['amount']) .  "'
 		");
 	}
 
