@@ -4,31 +4,27 @@ class File {
 	private $directory;
 
 	public function read($session_id) {
-		$file = DIR_SESSION . 'sess_' . basename($session_id);
+		$file = DIR_SESSION . '/sess_' . basename($session_id);
 
 		if (is_file($file)) {
-			$size = filesize($file);
+			$handle = fopen($file, 'r');
 
-			if ($size) {
-				$handle = fopen($file, 'r');
+			flock($handle, LOCK_SH);
 
-				flock($handle, LOCK_SH);
+			$data = fread($handle, filesize($file));
 
-				$data = fread($handle, $size);
+			flock($handle, LOCK_UN);
 
-				flock($handle, LOCK_UN);
+			fclose($handle);
 
-				fclose($handle);
-
-				return unserialize($data);
-			}
+			return unserialize($data);
+		} else {
+			return array();
 		}
-
-		return array();
 	}
 
 	public function write($session_id, $data) {
-		$file = DIR_SESSION . 'sess_' . basename($session_id);
+		$file = DIR_SESSION . '/sess_' . basename($session_id);
 
 		$handle = fopen($file, 'w');
 
@@ -46,10 +42,10 @@ class File {
 	}
 
 	public function destroy($session_id) {
-		$file = DIR_SESSION . 'sess_' . basename($session_id);
+		$file = DIR_SESSION . '/sess_' . basename($session_id);
 
 		if (is_file($file)) {
-			unlink($file);
+			unset($file);
 		}
 	}
 
@@ -69,7 +65,7 @@ class File {
 		if ((rand() % $gc_divisor) < $gc_probability) {
 			$expire = time() - ini_get('session.gc_maxlifetime');
 
-			$files = glob(DIR_SESSION . 'sess_*');
+			$files = glob(DIR_SESSION . '/sess_*');
 
 			foreach ($files as $file) {
 				if (filemtime($file) < $expire) {

@@ -1,6 +1,7 @@
 <?php
 // Site
 $_['site_url']           = HTTP_SERVER;
+$_['site_ssl']           = HTTPS_SERVER;
 
 // Url
 $_['url_autostart']      = false;
@@ -25,16 +26,16 @@ $_['template_directory'] = '';
 $_['template_cache']     = true;
 
 // Autoload Libraries
-$_['library_autoload']   = array();
+$_['library_autoload']   = array(
+	'openbay'
+);
 
 // Actions
 $_['action_pre_action']  = array(
 	'startup/session',
 	'startup/startup',
-	'startup/marketing',
 	'startup/error',
 	'startup/event',
-	'startup/sass',
 	'startup/maintenance',
 	'startup/seo_url'
 );
@@ -42,18 +43,23 @@ $_['action_pre_action']  = array(
 // Action Events
 $_['action_event'] = array(
 	'controller/*/before' => array(
-		//'event/debug/before',
 		'event/language/before'
 	),
 	'controller/*/after' => array(
-		'event/language/after',
-		//'event/debug/after'
-	),
+		'event/language/after'
+	),	
 	'view/*/before' => array(
-		500 => 'event/theme',
-		998 => 'event/language'
+		500  => 'event/theme/override',
+		998  => 'event/language',
+		1000 => 'event/theme'
 	),
 	'language/*/after' => array(
 		'event/translation'
+	),
+	//'view/*/before' => array(
+	//	1000  => 'event/debug/before'
+	//),
+	'controller/*/after'  => array(
+		'event/debug/after'
 	)
 );
